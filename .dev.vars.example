@@ -1,0 +1,6 @@
+# Local Vite development only bypasses Access; deployed Workers never do.
+REPORT_TIMEZONE="Asia/Taipei"
+# Required in Cloudflare production variables:
+# ACCESS_TEAM_DOMAIN="your-team.cloudflareaccess.com"
+# ACCESS_AUD="application-audience-tag"
+# OWNER_EMAIL="you@example.com"

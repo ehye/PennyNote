@@ -1,6 +1,6 @@
 # PennyNote UI Summary
 
-Updated: 2026-10-10 · Static prototype
+Updated: 2026-10-10 · UI contract for the SvelteKit app and original sketch
 
 ## Style & navigation
 - Warm notebook only: cream/green, system sans-serif, 4–8px corners, minimal text.
@@ -33,7 +33,8 @@ Updated: 2026-10-10 · Static prototype
 - Renames/moves update linked notes; names unique among siblings; Transfer reserved.
 
 ## Prototype
+- Application: `src/`; persistent D1 storage, server validation, and Access JWT verification. Production setup is in `README.md`; cloud deployment is pending.
 - Source: `.planning/sketches/001-responsive-concepts/index.html`; theme: `.planning/sketches/themes/default.css`.
 - Preview: `http://localhost:4173/001-responsive-concepts/` while the server runs.
 - Plain HTML/CSS/JS, fictional in-memory data; reload resets changes. Syntax checked; Chrome MCP visual verification pending.
-- No production stack, backend, auth, persistence, backup, or exchange-rate conversion.
+- Sketch remains in-memory only; application uses the stack in `TECH-STACK.md`. Backup tooling and exchange-rate conversion remain unimplemented.

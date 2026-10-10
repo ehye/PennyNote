@@ -1,7 +1,7 @@
 # PennyNote: Proposed Stack & Hosting
 
 Updated: 2026-10-10
-Status: recommendation for later implementation; not yet deployed or adopted.
+Status: implemented in the codebase; Cloudflare provisioning and production deployment remain pending. See `README.md` for setup.
 
 ## Goal
 One user can securely access PennyNote from desktop/mobile over home Wi-Fi or 4G, without leaving a home computer running.
