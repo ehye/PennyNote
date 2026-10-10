@@ -11,4 +11,4 @@ No external app references specified. No technology stack selected.
 ## Sketches
 | # | Name | Design Question | Winner | Tags |
 |---|------|-----------------|--------|------|
-| 001 | Responsive concepts | Warm notebook or clean minimal for entry and review? | A · Warm notebook, sans-serif, tighter corners | mobile, desktop, home, entry, reports, accounts, settings |
+| 001 | Responsive concepts | Warm notebook for entry and review | Warm notebook only, sans-serif, tighter corners | mobile, desktop, home, entry, reports, accounts, settings |

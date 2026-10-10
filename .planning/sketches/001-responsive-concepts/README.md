@@ -1,7 +1,7 @@
 ---
 sketch: 001
 name: responsive-concepts
-question: "Does a warm notebook or clean minimal direction better encourage daily recording while supporting desktop review?"
+question: "How should warm notebook support daily recording and desktop review?"
 winner: "A"
 tags: [mobile, desktop, entry, reports, visual-direction]
 ---
@@ -10,8 +10,7 @@ tags: [mobile, desktop, entry, reports, visual-direction]
 
 Open `index.html` using a static server. Both mobile and desktop start on recent notes with a New note button. Reports remain available through Review/Overview navigation, not on the home page. Successful saves return home.
 
-- **A: Warm notebook (selected)** — cream, forest green, system sans-serif, tighter corners.
-- **B: Clean minimal** — white, blue, sans-serif headings, tighter corners.
+**Warm notebook** — cream, forest green, system sans-serif, tighter corners. This is the sole available direction; the alternative theme and comparison toolbar are removed from the UI.
 
 Current decisions are consolidated in [`../../UI-SUMMARY.md`](../../UI-SUMMARY.md); that summary supersedes earlier iteration notes below.
 Selected: A (Warm notebook). Keep entry copy minimal and omit recent notes from the entry screen.
