@@ -9,28 +9,28 @@ CREATE INDEX entries_account ON entries(account_id);
 CREATE INDEX entries_destination ON entries(destination_id);
 --> statement-breakpoint
 CREATE TRIGGER category_insert_valid BEFORE INSERT ON categories BEGIN
-  SELECT CASE WHEN lower(NEW.name) = 'transfer' OR length(trim(NEW.name)) = 0
+  SELECT (CASE WHEN lower(NEW.name) = 'transfer' OR length(trim(NEW.name)) = 0
     OR (NEW.parent_id IS NULL AND NEW.icon <> '')
     OR (NEW.parent_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM categories WHERE id = NEW.parent_id AND parent_id IS NULL))
-    THEN RAISE(ABORT, 'invalid category') END;
+    THEN RAISE(ABORT, 'invalid category') END);
 END;
 --> statement-breakpoint
 CREATE TRIGGER category_update_valid BEFORE UPDATE ON categories BEGIN
-  SELECT CASE WHEN lower(NEW.name) = 'transfer' OR length(trim(NEW.name)) = 0
+  SELECT (CASE WHEN lower(NEW.name) = 'transfer' OR length(trim(NEW.name)) = 0
     OR (NEW.parent_id IS NULL) <> (OLD.parent_id IS NULL)
     OR (NEW.parent_id IS NULL AND NEW.icon <> '')
     OR (NEW.parent_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM categories WHERE id = NEW.parent_id AND parent_id IS NULL))
-    THEN RAISE(ABORT, 'invalid category') END;
+    THEN RAISE(ABORT, 'invalid category') END);
 END;
 --> statement-breakpoint
 CREATE TRIGGER category_delete_valid BEFORE DELETE ON categories BEGIN
-  SELECT CASE WHEN EXISTS (SELECT 1 FROM categories WHERE parent_id = OLD.id)
-    THEN RAISE(ABORT, 'category has children') END;
+  SELECT (CASE WHEN EXISTS (SELECT 1 FROM categories WHERE parent_id = OLD.id)
+    THEN RAISE(ABORT, 'category has children') END);
 END;
 --> statement-breakpoint
 CREATE TRIGGER account_immutable BEFORE UPDATE ON accounts BEGIN
-  SELECT CASE WHEN NEW.type <> OLD.type OR NEW.currency <> OLD.currency OR NEW.id <> OLD.id
-    THEN RAISE(ABORT, 'account type and currency are immutable') END;
+  SELECT (CASE WHEN NEW.type <> OLD.type OR NEW.currency <> OLD.currency OR NEW.id <> OLD.id
+    THEN RAISE(ABORT, 'account type and currency are immutable') END);
 END;
 --> statement-breakpoint
 CREATE TRIGGER entry_zero_adjustment BEFORE INSERT ON entries
@@ -39,22 +39,22 @@ WHEN NEW.type = 'Adjustment' AND NEW.amount = 0 BEGIN
 END;
 --> statement-breakpoint
 CREATE TRIGGER entry_insert_valid BEFORE INSERT ON entries BEGIN
-  SELECT CASE WHEN NEW.type NOT IN ('Expense', 'Income', 'Transfer', 'Adjustment')
+  SELECT (CASE WHEN NEW.type NOT IN ('Expense', 'Income', 'Transfer', 'Adjustment')
     OR NEW.amount <> cast(NEW.amount AS INTEGER) OR abs(NEW.amount) > 1000000000000
     OR (NEW.type <> 'Adjustment' AND NEW.amount <= 0)
     OR (NEW.type IN ('Expense', 'Income') AND (NEW.destination_id IS NOT NULL OR NOT EXISTS (SELECT 1 FROM categories WHERE id = NEW.category_id AND parent_id IS NOT NULL)))
     OR (NEW.type = 'Transfer' AND (NEW.category_id IS NOT NULL OR NEW.account_id = NEW.destination_id OR NOT EXISTS (SELECT 1 FROM accounts a JOIN accounts b ON a.currency = b.currency WHERE a.id = NEW.account_id AND b.id = NEW.destination_id)))
     OR (NEW.type = 'Adjustment' AND (NEW.category_id IS NOT NULL OR NEW.destination_id IS NOT NULL OR NEW.balance_before IS NULL OR NEW.balance_after IS NULL OR NEW.balance_after - NEW.balance_before <> NEW.amount))
-    THEN RAISE(ABORT, 'invalid ledger record') END;
+    THEN RAISE(ABORT, 'invalid ledger record') END);
 END;
 --> statement-breakpoint
 CREATE TRIGGER entry_update_valid BEFORE UPDATE ON entries BEGIN
-  SELECT CASE WHEN OLD.type = 'Adjustment' THEN RAISE(ABORT, 'adjustment is read-only') END;
-  SELECT CASE WHEN NEW.type NOT IN ('Expense', 'Income', 'Transfer')
+  SELECT (CASE WHEN OLD.type = 'Adjustment' THEN RAISE(ABORT, 'adjustment is read-only') END);
+  SELECT (CASE WHEN NEW.type NOT IN ('Expense', 'Income', 'Transfer')
     OR NEW.amount <= 0 OR NEW.amount <> cast(NEW.amount AS INTEGER) OR NEW.amount > 1000000000000
     OR (NEW.type IN ('Expense', 'Income') AND (NEW.destination_id IS NOT NULL OR NOT EXISTS (SELECT 1 FROM categories WHERE id = NEW.category_id AND parent_id IS NOT NULL)))
     OR (NEW.type = 'Transfer' AND (NEW.category_id IS NOT NULL OR NEW.account_id = NEW.destination_id OR NOT EXISTS (SELECT 1 FROM accounts a JOIN accounts b ON a.currency = b.currency WHERE a.id = NEW.account_id AND b.id = NEW.destination_id)))
-    THEN RAISE(ABORT, 'invalid ledger record') END;
+    THEN RAISE(ABORT, 'invalid ledger record') END);
 END;
 --> statement-breakpoint
 CREATE TRIGGER entry_delete_valid BEFORE DELETE ON entries WHEN OLD.type = 'Adjustment' BEGIN

@@ -22,7 +22,7 @@ npm test
 npm run build
 ```
 
-Validated: 21 money/ledger/Access tests, clean type check, production build, local D1 migrations, and HTTP form/persistence/CSRF checks. Visual browser testing remains pending because Chrome is unavailable in the development environment. Charts are lazy-loaded; ECharts currently produces a non-blocking bundle-size warning.
+Validated: 23 money/ledger/Access/migration tests, clean type check, production build, local and remote D1 migrations, and HTTP form/persistence/CSRF checks. Visual browser testing remains pending because Chrome is unavailable in the development environment. Charts are lazy-loaded; ECharts currently produces a non-blocking bundle-size warning.
 
 ## Production on Cloudflare
 
@@ -46,6 +46,7 @@ The app verifies Access JWT signatures, issuer, audience, expiry, and owner emai
 - SQLite triggers atomically calculate balance-change deltas. Optimistic versions reject stale note/account edits, including edits after another tab changes account movements.
 - Reports exclude transfers/adjustments; account/category renames preserve stable references. Used accounts cannot be deleted.
 - Schema migrations are in `drizzle/`. `npm run db:generate` generates schema changes; custom indexes/triggers must be maintained explicitly.
+- Keep trigger CASE expressions parenthesized (`SELECT (CASE … END);`): remote D1 can misparse bare `SELECT CASE … END;` as a trigger terminator, even when local SQLite accepts it.
 
 Backup/export and restore tooling, offline recording, attachments, and currency conversion are not implemented. Configure and test a database recovery process before relying on the app for irreplaceable records.
 
